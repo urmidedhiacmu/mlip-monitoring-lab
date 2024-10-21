@@ -14,10 +14,10 @@ To receive credit for this lab, show your work to the TA during recitation.
 ## Getting started
 - Ensure Python (preferably 3.8, 3.9, 3.10) and Docker is installed on your machine.
 - Clone the starter code from this [Git repository](https://github.com/tanya-5/mlip-monitoring-lab) 
-- Navigate to the folder mlip-monitoring-lab
+- Navigate to this Github folder
 - Install required dependencies
     - `pip install -r requirements.txt`
-- Establish an SSH tunnel to the Kafka broker if not already connected
+- Establish an SSH tunnel to the Kafka broker if not already connected (Refer to Lab2 canvas assignment page for more information)
     - `ssh -o ServerAliveInterval=60 -L 9092:localhost:9092 tunnel@128.2.204.215 -NTf`
 
 ## Background
@@ -43,23 +43,23 @@ To receive credit for this lab, show your work to the TA during recitation.
 
 ## Configure Grafana Dashboard for Visualization
 ### Add Data Source in Grafana
-1. Access Grafana at http://localhost:3000 and login (default username: admin, password: admin).
-2. Add Prometheus as a data source by navigating to Data sources > Add source.
-3. In the Connection section, set the Prometheus server URL to http://prometheus:9090.
+1. Access Grafana at http://localhost:3000 and login (default username: admin, password: admin). If this is not the first time you use Grafana, you possibly have changed the password before. You could reset the password in docker by running command: 'grafana-cli admin reset-admin-password newpassword'.
+2. Add Prometheus as a data source by navigating to Connections > Data sources > Add source > Prometheus.
+3. In the Connection section, set the Prometheus server URL to http://prometheus:9090 (NOT http://localhost:9090).
 4. Save and test the data source to confirm connectivity.
 
 
 ### Configure Dashboard
 1. Go to Dashboards > create a new dashboard > add visualization.
-2. Choose the Prometheus data source you added. Now we will add multiple visualizations(panels) on this dashboard. 
-3. You can use `kick start your query` button to explore different query types. You can also click on `code` to write [PromQL](https://grafana.com/blog/2020/02/04/introduction-to-promql-the-prometheus-query-language/) queries.
+2. Choose the Prometheus data source you added. Now we will add multiple visualizations (panels) on this dashboard. 
+3. You can use `kick start your query` button in Query section at the bottom to explore different query types. You can also click on `code` to write [PromQL](https://grafana.com/blog/2020/02/04/introduction-to-promql-the-prometheus-query-language/) queries.
 4. Panel 1: Total successful requests - Count the total number of requests with status code 200. 
    1. Add `request_count_total` as metric, filter label `http_status` and equate to `200`. Make sure that visualization selected is time series. 
    2. You can see the query generated at the bottom. Alternatively, you can write the query using `code` option.
    3. Click on run queries and select Apply. You will see the panel added to dashboard. Click save after every panel.
    ![grafana-1](https://github.com/tanya-5/mlip-monitoring-lab/assets/40654673/b7e16578-aacf-429e-b0da-57938e392010)
    
-5. Panel 2: Total Recommendation Requests Over Time - Total of rate of requests over time (5ms)
+5. Panel 2: Total Recommendation Requests Over Time - Total of rate of requests over time (5 min)
    1. Click on add> visualization. In the queries below, add `request_count_total` as metric. 
    2. Add operations> range functions > rate  with range 5m
    3. Add one more operations> aggregations > sum. 
